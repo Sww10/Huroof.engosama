@@ -214,12 +214,6 @@
             const urlParams = new URLSearchParams(window.location.search);
             const roomCode = urlParams.get('room');
 
-            // حل مشكلة الرجوع نهائياً
-            window.addEventListener('pageshow', function (event) {
-                if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
-                    window.location.replace('/home.html');
-                }
-            });
 
             // التعامل مع الأزرار
             document.getElementById('btn-pc').addEventListener('click', () => {
