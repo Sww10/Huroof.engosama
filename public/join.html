@@ -88,32 +88,99 @@
             }
         }
 
-        /* ===== Cinematic Text ===== */
-        .text-content {
+        /* ===== Selection UI ===== */
+        .content-wrapper {
             position: relative;
             z-index: 3;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2.5rem;
+            opacity: 0;
+            transform: translateY(15px);
+            filter: blur(4px);
+            animation: uiFloat 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.5s forwards;
+        }
+
+        .text-content {
             font-size: 2.5rem;
             font-weight: 900;
             color: #ffffff;
             text-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            opacity: 0;
-            transform: translateY(15px);
-            filter: blur(4px);
             letter-spacing: 0px;
-            animation: textFloat 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.5s forwards;
+            text-align: center;
         }
 
         .text-content span {
             color: #22d3ee;
         }
 
-        @keyframes textFloat {
+        @keyframes uiFloat {
             to {
                 opacity: 1;
                 transform: translateY(0);
-                letter-spacing: 4px;
                 filter: blur(0px);
             }
+        }
+
+        .buttons-container {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .device-btn {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 1.25rem 2.5rem;
+            color: white;
+            font-family: 'Tajawal', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 800;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .device-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: 0.5s;
+        }
+
+        .device-btn:hover::before {
+            left: 100%;
+        }
+
+        .device-btn:hover {
+            background: rgba(34, 211, 238, 0.1);
+            border-color: #22d3ee;
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(34, 211, 238, 0.2);
+        }
+
+        .device-btn svg {
+            color: #22d3ee;
+            width: 32px;
+            height: 32px;
+            transition: transform 0.3s ease;
+        }
+
+        .device-btn:hover svg {
+            transform: scale(1.1);
         }
     </style>
 </head>
@@ -125,8 +192,20 @@
     </div>
     <div class="blur-layer"></div>
 
-    <div class="text-content">
-        جاري النقل<span>...</span>
+    <div class="content-wrapper">
+        <div class="text-content">
+            حدد نوع <span>جهازك</span>
+        </div>
+        <div class="buttons-container">
+            <button class="device-btn" id="btn-pc">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                كمبيوتر
+            </button>
+            <button class="device-btn" id="btn-mobile">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+                جوال
+            </button>
+        </div>
     </div>
 
     <script>
@@ -135,11 +214,6 @@
             const urlParams = new URLSearchParams(window.location.search);
             const roomCode = urlParams.get('room');
 
-            let target = '/home.html';
-            if (roomCode && roomCode.trim() !== '') {
-                target = '/index.html?room=' + encodeURIComponent(roomCode.trim());
-            }
-
             // حل مشكلة الرجوع نهائياً
             window.addEventListener('pageshow', function (event) {
                 if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
@@ -147,10 +221,22 @@
                 }
             });
 
-            // توجيه بعد الانتهاء من الأنيميشن
-            setTimeout(() => {
+            // التعامل مع الأزرار
+            document.getElementById('btn-pc').addEventListener('click', () => {
+                let target = '/home.html';
+                if (roomCode && roomCode.trim() !== '') {
+                    target = '/index.html?room=' + encodeURIComponent(roomCode.trim());
+                }
                 window.location.replace(target);
-            }, 1300);
+            });
+
+            document.getElementById('btn-mobile').addEventListener('click', () => {
+                let target = '/home.html';
+                if (roomCode && roomCode.trim() !== '') {
+                    target = '/index_mobile.html?room=' + encodeURIComponent(roomCode.trim());
+                }
+                window.location.replace(target);
+            });
         });
     </script>
 </body>
