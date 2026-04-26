@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>عيش التجربة | حروف مع أسامة</title>
+    <link rel="icon" href="/Logo.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    <style>
+        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+        :root{
+            --yellow:#FFD700;--purple:#7B2D8E;--green:#4CAF50;--orange:#FF6F00;
+            --red:#E53935;--pink:#E91E63;--blue:#1E88E5;
+            --team1:#4CAF50;--team2:#FF6F00;
+            --text:#fff;--text2:rgba(255,255,255,0.8);--text3:rgba(255,255,255,0.5);
+        }
+        html,body{width:100%;height:100%;overflow:hidden;font-family:'Tajawal',sans-serif;background:#1a0a2e;color:var(--text)}
+        #gameCanvas{position:fixed;inset:0;z-index:0}
+        canvas{display:block}
+
+        /* === LOADING === */
+        #loadingScreen{position:fixed;inset:0;z-index:9999;background:linear-gradient(135deg,#1a0a2e,#2d1458,#4a1a7a);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;transition:opacity 0.8s}
+        #loadingScreen.hide{opacity:0;pointer-events:none}
+        .load-logo{font-size:3rem;font-weight:900;background:linear-gradient(135deg,var(--yellow),#FFA000);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-shadow:none}
+        .load-sub{color:var(--text2);font-size:1rem;font-weight:700}
+        .load-bar-wrap{width:320px;height:8px;background:rgba(255,255,255,0.1);border-radius:20px;overflow:hidden}
+        .load-bar{height:100%;width:0%;background:linear-gradient(90deg,var(--yellow),var(--orange),var(--pink));border-radius:20px;transition:width 0.3s}
+        .load-hexagons{display:flex;gap:8px;margin-top:10px}
+        .load-hex{width:20px;height:20px;background:var(--yellow);clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);animation:hexPulse 1.5s ease-in-out infinite}
+        .load-hex:nth-child(2){animation-delay:0.2s;background:var(--purple)}
+        .load-hex:nth-child(3){animation-delay:0.4s;background:var(--green)}
+        .load-hex:nth-child(4){animation-delay:0.6s;background:var(--orange)}
+        .load-hex:nth-child(5){animation-delay:0.8s;background:var(--red)}
+        @keyframes hexPulse{0%,100%{transform:scale(1);opacity:0.6}50%{transform:scale(1.4);opacity:1}}
+
+        /* === HUD === */
+        #hud{position:fixed;inset:0;z-index:10;pointer-events:none}
+        #hud>*{pointer-events:auto}
+
+        /* Top Bar */
+        .top-bar{position:absolute;top:0;left:0;right:0;display:flex;justify-content:center;align-items:center;height:72px;background:linear-gradient(180deg,rgba(26,10,46,0.95) 60%,transparent);padding:0 20px;gap:0}
+        .team-score-box{display:flex;align-items:center;gap:14px;padding:12px 28px;border-radius:0 0 20px 20px;position:relative}
+        .team1-box{background:linear-gradient(135deg,rgba(76,175,80,0.3),rgba(76,175,80,0.1));border:2px solid rgba(76,175,80,0.4);border-top:none}
+        .team2-box{background:linear-gradient(135deg,rgba(255,111,0,0.3),rgba(255,111,0,0.1));border:2px solid rgba(255,111,0,0.4);border-top:none}
+        .team-score-box .team-name{font-weight:800;font-size:1rem}
+        .team-score-box .team-pts{font-size:2rem;font-weight:900;min-width:45px;text-align:center;text-shadow:0 0 20px currentColor}
+        .team1-box .team-pts{color:var(--team1)}
+        .team2-box .team-pts{color:var(--team2)}
+        .vs-badge{width:50px;height:50px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1rem;color:var(--yellow);background:linear-gradient(135deg,rgba(255,215,0,0.2),rgba(255,160,0,0.1));border:2px solid rgba(255,215,0,0.3);border-radius:50%;letter-spacing:1px;margin:0 8px}
+
+        /* Rosters */
+        .roster-panel{position:absolute;top:88px;width:200px;display:flex;flex-direction:column;gap:5px;padding:8px;max-height:calc(100vh - 220px);overflow-y:auto}
+        .roster-panel::-webkit-scrollbar{width:3px}
+        .roster-panel::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.2);border-radius:10px}
+        .roster-left{left:8px}
+        .roster-right{right:8px}
+        .roster-card{display:flex;align-items:center;gap:8px;padding:7px 10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);border-radius:12px;backdrop-filter:blur(8px);font-size:0.8rem;transition:all 0.3s}
+        .roster-card:hover{background:rgba(255,255,255,0.1);transform:translateX(-2px)}
+        .roster-card .r-emoji{font-size:1.3rem}
+        .roster-card .r-name{font-weight:700;flex:1}
+        .roster-card .r-score{font-weight:900;font-size:0.85rem}
+        .team1-card{border-right:3px solid var(--team1)}
+        .team1-card .r-score{color:var(--team1)}
+        .team2-card{border-left:3px solid var(--team2)}
+        .team2-card .r-score{color:var(--team2)}
+
+        /* Bottom */
+        .bottom-bar{position:absolute;bottom:0;left:0;right:0;display:flex;justify-content:center;align-items:flex-end;gap:14px;padding:14px 20px;background:linear-gradient(0deg,rgba(26,10,46,0.95) 60%,transparent)}
+        .buzz-btn{width:110px;height:110px;border-radius:50%;border:none;background:radial-gradient(circle at 30% 30%,#ff4444,#cc0000);color:white;font-size:1.8rem;cursor:pointer;transition:all 0.15s;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:2px;box-shadow:0 6px 30px rgba(255,0,0,0.4),inset 0 -4px 8px rgba(0,0,0,0.3),inset 0 4px 8px rgba(255,255,255,0.2);position:relative}
+        .buzz-btn::after{content:'';position:absolute;inset:0;border-radius:50%;border:3px solid rgba(255,255,255,0.2);pointer-events:none}
+        .buzz-btn:hover{transform:scale(1.1);box-shadow:0 8px 40px rgba(255,0,0,0.6),inset 0 -4px 8px rgba(0,0,0,0.3),inset 0 4px 8px rgba(255,255,255,0.2)}
+        .buzz-btn:active{transform:scale(0.92);box-shadow:0 2px 15px rgba(255,0,0,0.3)}
+        .buzz-btn .buzz-icon{font-size:2.5rem;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.3))}
+        .buzz-btn .buzz-text{font-size:0.7rem;font-weight:800;font-family:'Tajawal'}
+
+        .ctrl-btn{width:46px;height:46px;border-radius:50%;border:2px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.08);backdrop-filter:blur(10px);color:var(--text2);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.25s}
+        .ctrl-btn:hover{background:rgba(255,255,255,0.18);color:var(--text);transform:scale(1.1)}
+        .ctrl-btn.active{color:var(--yellow);border-color:var(--yellow);box-shadow:0 0 16px rgba(255,215,0,0.3)}
+
+        /* Question Status */
+        .question-bar{position:absolute;bottom:155px;left:50%;transform:translateX(-50%);padding:14px 32px;background:linear-gradient(135deg,rgba(123,45,142,0.9),rgba(74,26,122,0.9));border:2px solid rgba(255,215,0,0.3);border-radius:50px;backdrop-filter:blur(16px);font-weight:800;font-size:1rem;display:none;text-align:center;max-width:500px;box-shadow:0 8px 32px rgba(123,45,142,0.4)}
+        .question-bar.show{display:block;animation:slideUp 0.4s ease-out}
+        @keyframes slideUp{from{opacity:0;transform:translateX(-50%) translateY(20px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+
+        /* Customize Panel */
+        .customize-panel{position:absolute;right:-320px;top:50%;transform:translateY(-50%);width:290px;background:linear-gradient(180deg,rgba(123,45,142,0.95),rgba(26,10,46,0.95));border:1px solid rgba(255,215,0,0.2);border-radius:20px 0 0 20px;backdrop-filter:blur(20px);padding:22px;transition:right 0.4s cubic-bezier(0.4,0,0.2,1);z-index:20}
+        .customize-panel.open{right:0}
+        .cust-title{font-weight:900;font-size:1.1rem;margin-bottom:14px;display:flex;align-items:center;gap:8px;color:var(--yellow)}
+        .cust-section{margin-bottom:14px}
+        .cust-label{font-size:0.78rem;color:var(--text2);font-weight:700;margin-bottom:8px}
+        .emoji-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:5px}
+        .emoji-opt{width:38px;height:38px;border-radius:10px;border:2px solid rgba(255,255,255,0.1);background:transparent;font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
+        .emoji-opt:hover,.emoji-opt.selected{border-color:var(--yellow);background:rgba(255,215,0,0.15);transform:scale(1.1)}
+        .color-grid{display:flex;gap:7px;flex-wrap:wrap}
+        .color-opt{width:34px;height:34px;border-radius:50%;border:3px solid transparent;cursor:pointer;transition:all 0.2s}
+        .color-opt:hover,.color-opt.selected{border-color:white;transform:scale(1.2)}
+        .cust-close{position:absolute;top:12px;left:12px;width:30px;height:30px;border-radius:50%;border:1px solid rgba(255,255,255,0.2);background:transparent;color:var(--text2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:0.75rem}
+
+        /* Back Button */
+        .back-btn{position:absolute;top:14px;right:14px;padding:8px 16px;border-radius:50px;border:1px solid rgba(255,215,0,0.3);background:rgba(123,45,142,0.6);backdrop-filter:blur(10px);color:var(--yellow);font-family:'Tajawal';font-weight:700;font-size:0.8rem;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all 0.25s;z-index:20}
+        .back-btn:hover{background:rgba(123,45,142,0.9);transform:translateX(4px)}
+
+        /* Buzz Overlay */
+        .buzz-overlay{position:fixed;inset:0;z-index:50;display:none;align-items:center;justify-content:center;background:rgba(26,10,46,0.7);backdrop-filter:blur(8px)}
+        .buzz-overlay.show{display:flex;animation:fadeIn 0.3s}
+        .buzz-card{background:linear-gradient(135deg,rgba(123,45,142,0.95),rgba(74,26,122,0.95));border:3px solid var(--yellow);border-radius:24px;padding:36px 52px;text-align:center;animation:popIn 0.4s cubic-bezier(0.34,1.56,0.64,1);box-shadow:0 0 60px rgba(255,215,0,0.3)}
+        .buzz-card .buzz-emoji{font-size:3.5rem;margin-bottom:10px}
+        .buzz-card .buzz-name{font-size:1.8rem;font-weight:900;color:var(--yellow)}
+        .buzz-card .buzz-team{font-size:1rem;color:var(--text2);margin-top:6px;font-weight:700}
+        @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+        @keyframes popIn{from{transform:scale(0.6);opacity:0}to{transform:scale(1);opacity:1}}
+
+        /* Mic */
+        .mic-indicator{display:none;position:absolute;bottom:148px;left:50%;transform:translateX(-50%);padding:6px 18px;background:rgba(255,0,0,0.15);border:1px solid rgba(255,0,0,0.3);border-radius:100px;font-size:0.75rem;color:#ff4444;font-weight:700;gap:8px;align-items:center}
+        .mic-indicator.show{display:flex}
+        .wave-bars{display:flex;gap:2px;align-items:center;height:14px}
+        .wave-bar{width:3px;background:#ff4444;border-radius:2px;animation:waveAnim 0.5s ease-in-out infinite alternate}
+        .wave-bar:nth-child(1){height:5px;animation-delay:0s}
+        .wave-bar:nth-child(2){height:11px;animation-delay:0.1s}
+        .wave-bar:nth-child(3){height:7px;animation-delay:0.2s}
+        .wave-bar:nth-child(4){height:13px;animation-delay:0.15s}
+        .wave-bar:nth-child(5){height:4px;animation-delay:0.05s}
+        @keyframes waveAnim{from{height:3px}to{height:14px}}
+
+        /* Brand watermark */
+        .brand-watermark{position:absolute;bottom:14px;right:14px;font-size:0.65rem;color:rgba(255,255,255,0.15);font-weight:700;letter-spacing:1px}
+
+        /* FPS Overlays */
+        #crosshair { position:fixed; top:50%; left:50%; width:20px; height:20px; transform:translate(-50%,-50%); color:rgba(255,255,255,0.7); font-size:20px; font-weight:100; pointer-events:none; display:none; justify-content:center; align-items:center; z-index:40; text-shadow:0 0 5px black; }
+        #blocker { position:absolute; width:100%; height:100%; background-color:rgba(0,0,0,0.6); backdrop-filter:blur(8px); display:none; align-items:center; justify-content:center; flex-direction:column; z-index:9000; }
+        #instructions { text-align:center; color:#ffffff; cursor:pointer; font-weight:800; font-size:1.1rem; line-height:1.6; padding:40px; border:2px solid rgba(255,215,0,0.3); border-radius:30px; background:linear-gradient(135deg,rgba(123,45,142,0.8),rgba(26,10,46,0.9)); box-shadow:0 0 50px rgba(123,45,142,0.5); transition:all 0.3s; }
+        #instructions:hover { transform:scale(1.02); box-shadow:0 0 70px rgba(255,215,0,0.4); border-color:var(--yellow); }
+
+    </style>
+    <script src="/window-transition.js"></script>
+</head>
+<body>
+    <div id="loadingScreen">
+        <div class="load-logo">حروف مع أسامة</div>
+        <div class="load-sub">جاري بناء الاستوديو...</div>
+        <div class="load-bar-wrap"><div class="load-bar" id="loadBar"></div></div>
+        <div class="load-hexagons"><div class="load-hex"></div><div class="load-hex"></div><div class="load-hex"></div><div class="load-hex"></div><div class="load-hex"></div></div>
+    </div>
+
+    <div id="gameCanvas"></div>
+
+    <div id="hud" style="display:none">
+        <button class="back-btn" onclick="window.location.href='/home.html'"><i class="fas fa-arrow-right"></i> رجوع</button>
+        <div class="top-bar">
+            <div class="team-score-box team1-box">
+                <div class="team-pts" id="score1">0</div>
+                <div class="team-name" id="teamName1">الفريق الأول</div>
+            </div>
+            <div class="vs-badge">VS</div>
+            <div class="team-score-box team2-box">
+                <div class="team-name" id="teamName2">الفريق الثاني</div>
+                <div class="team-pts" id="score2">0</div>
+            </div>
+        </div>
+        <div class="roster-panel roster-left" id="roster1"></div>
+        <div class="roster-panel roster-right" id="roster2"></div>
+        <div class="question-bar" id="questionBar"></div>
+        <div class="mic-indicator" id="micIndicator">
+            <div class="wave-bars"><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div></div>
+            ميكروفون مفعّل
+        </div>
+        <div class="bottom-bar">
+            <button class="ctrl-btn" id="micBtn" title="ميكروفون"><i class="fas fa-microphone"></i></button>
+            <button class="ctrl-btn" id="customizeBtn" title="تخصيص"><i class="fas fa-palette"></i></button>
+            <button class="buzz-btn" id="buzzBtn"><i class="fas fa-bell buzz-icon"></i><span class="buzz-text">اضغط!</span></button>
+            <button class="ctrl-btn" id="fullscreenBtn" title="شاشة كاملة"><i class="fas fa-expand"></i></button>
+            <button class="ctrl-btn" id="helpBtn" title="مساعدة"><i class="fas fa-question"></i></button>
+        </div>
+        <div class="brand-watermark">حروف مع أسامة © 2026</div>
+    </div>
+
+    <div class="buzz-overlay" id="buzzOverlay">
+        <div class="buzz-card">
+            <div class="buzz-emoji" id="buzzEmoji">🔔</div>
+            <div class="buzz-name" id="buzzName">-</div>
+            <div class="buzz-team" id="buzzTeam">-</div>
+        </div>
+    </div>
+
+    <div class="customize-panel" id="customizePanel">
+        <button class="cust-close" onclick="toggleCustomize()"><i class="fas fa-times"></i></button>
+        <div class="cust-title"><i class="fas fa-user-gear"></i> تخصيص الشخصية</div>
+        <div class="cust-section">
+            <div class="cust-label">اختر شكلك</div>
+            <div class="emoji-grid" id="emojiGrid"></div>
+        </div>
+        <div class="cust-section">
+            <div class="cust-label">لون الشخصية</div>
+            <div class="color-grid" id="colorGrid"></div>
+        </div>
+    </div>
+
+    <!-- FPS UI elements -->
+    <div id="crosshair">+</div>
+    
+    <div id="blocker">
+        <div id="instructions">
+            <i class="fas fa-vr-cardboard" style="font-size:3rem; margin-bottom:15px; color:var(--yellow)"></i><br>
+            <span style="font-size:36px">انقر للدخول إلى العالم</span>
+            <br/><br/>
+            تحرك بـ (W, A, S, D) ، وانظر حولك بـ (الماوس)<br>
+            انظر للزر الأحمر واضغط بالماوس للإجابة
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- PointerLockControls script for FPS view -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/PointerLockControls.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/experience_scene.js?v=12"></script>
+</body>
+</html>
+

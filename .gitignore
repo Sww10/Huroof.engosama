@@ -1,0 +1,6 @@
+node_modules/
+.env
+dist/
+mobile-app/node_modules/
+mobile-app/dist/
+.DS_Store

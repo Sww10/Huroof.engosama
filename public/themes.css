@@ -1,0 +1,161 @@
+/* ===== Shared Themes - حروف مع أسامة ===== */
+/* Works with both variable naming conventions used across pages */
+
+/* --- Theme: Ocean (محيطي) --- */
+[data-color-theme="ocean"] {
+    --accent-1: #0ea5e9; --accent-2: #0284c7; --accent-3: #38bdf8;
+    --accent: #0ea5e9; --accent2: #0284c7; --accent3: #38bdf8;
+    --cyan: #06b6d4; --emerald: #2dd4bf; --rose: #f472b6;
+    --glow-purple: rgba(14, 165, 233, 0.4); --glow-cyan: rgba(6, 182, 212, 0.3);
+}
+
+/* --- Theme: Sunset (غروب) --- */
+[data-color-theme="sunset"] {
+    --accent-1: #f97316; --accent-2: #ef4444; --accent-3: #fb923c;
+    --accent: #f97316; --accent2: #ef4444; --accent3: #fb923c;
+    --cyan: #fbbf24; --emerald: #f59e0b; --rose: #f43f5e;
+    --glow-purple: rgba(249, 115, 22, 0.4); --glow-cyan: rgba(251, 191, 36, 0.3);
+}
+
+/* --- Theme: Forest (غابة) --- */
+[data-color-theme="forest"] {
+    --accent-1: #22c55e; --accent-2: #16a34a; --accent-3: #4ade80;
+    --accent: #22c55e; --accent2: #16a34a; --accent3: #4ade80;
+    --cyan: #34d399; --emerald: #10b981; --rose: #a3e635;
+    --glow-purple: rgba(34, 197, 94, 0.4); --glow-cyan: rgba(52, 211, 153, 0.3);
+}
+
+/* --- Theme: Golden (ذهبي) --- */
+[data-color-theme="golden"] {
+    --accent-1: #f59e0b; --accent-2: #d97706; --accent-3: #fbbf24;
+    --accent: #f59e0b; --accent2: #d97706; --accent3: #fbbf24;
+    --cyan: #fcd34d; --emerald: #fde68a; --rose: #fb923c;
+    --glow-purple: rgba(245, 158, 11, 0.4); --glow-cyan: rgba(252, 211, 77, 0.3);
+}
+
+/* --- Theme: Crimson (قرمزي) --- */
+[data-color-theme="crimson"] {
+    --accent-1: #ef4444; --accent-2: #dc2626; --accent-3: #f87171;
+    --accent: #ef4444; --accent2: #dc2626; --accent3: #f87171;
+    --cyan: #fb7185; --emerald: #fda4af; --rose: #e11d48;
+    --glow-purple: rgba(239, 68, 68, 0.4); --glow-cyan: rgba(251, 113, 133, 0.3);
+}
+
+/* --- Theme: Sky (سماوي) --- */
+[data-color-theme="sky"] {
+    --accent-1: #38bdf8; --accent-2: #7dd3fc; --accent-3: #bae6fd;
+    --accent: #38bdf8; --accent2: #7dd3fc; --accent3: #bae6fd;
+    --cyan: #67e8f9; --emerald: #a5f3fc; --rose: #c084fc;
+    --glow-purple: rgba(56, 189, 248, 0.4); --glow-cyan: rgba(103, 232, 249, 0.3);
+}
+
+/* --- Theme: Midnight (منتصف الليل) --- */
+[data-color-theme="midnight"] {
+    --bg-primary: #000000; --bg-secondary: #050510; --bg: #000000; --bg2: #050510;
+    --surface: rgba(10, 10, 25, 0.9); --surface-hover: rgba(15, 15, 35, 0.95);
+    --glass: rgba(255, 255, 255, 0.02); --glass-border: rgba(255, 255, 255, 0.05);
+    --accent-1: #818cf8; --accent-2: #6366f1; --accent-3: #a5b4fc;
+    --accent: #818cf8; --accent2: #6366f1; --accent3: #a5b4fc;
+    --cyan: #67e8f9; --emerald: #6ee7b7;
+    --glow-purple: rgba(129, 140, 248, 0.3); --glow-cyan: rgba(103, 232, 249, 0.2);
+}
+
+/* --- Theme: Rose (وردي) --- */
+[data-color-theme="rose"] {
+    --bg-primary: #fdf2f8; --bg-secondary: #fce7f3; --bg: #fdf2f8; --bg2: #fce7f3;
+    --surface: rgba(255, 228, 243, 0.75); --surface-hover: rgba(255, 215, 237, 0.9);
+    --glass: rgba(255, 192, 225, 0.25); --glass-border: rgba(236, 72, 153, 0.12);
+    --text-primary: #4a1942; --text-secondary: #831843; --text-muted: #be185d;
+    --text: #4a1942; --text2: #831843; --muted: #be185d;
+    --accent-1: #ec4899; --accent-2: #db2777; --accent-3: #f472b6;
+    --accent: #ec4899; --accent2: #db2777; --accent3: #f472b6;
+    --cyan: #f9a8d4; --emerald: #fbcfe8; --rose: #e11d48;
+    --amber: #f472b6; --team1: #f43f5e; --team2: #a855f7;
+    --glow-purple: rgba(236, 72, 153, 0.25); --glow-cyan: rgba(249, 168, 212, 0.2);
+}
+[data-color-theme="rose"] .bg-mesh::before {
+    background:
+        radial-gradient(ellipse 600px 600px at 20% 20%, rgba(236, 72, 153, 0.12) 0%, transparent 70%),
+        radial-gradient(ellipse 500px 500px at 80% 30%, rgba(219, 39, 119, 0.08) 0%, transparent 70%),
+        radial-gradient(ellipse 700px 700px at 50% 80%, rgba(249, 168, 212, 0.1) 0%, transparent 70%) !important;
+}
+[data-color-theme="rose"] .grid-overlay {
+    background-image:
+        linear-gradient(rgba(236, 72, 153, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(236, 72, 153, 0.03) 1px, transparent 1px) !important;
+}
+
+/* --- Theme: Neon (نيون) --- */
+[data-color-theme="neon"] {
+    --bg-primary: #0a0a1a; --bg-secondary: #0f0f2a; --bg: #0a0a1a; --bg2: #0f0f2a;
+    --surface: rgba(15, 15, 40, 0.85); --surface-hover: rgba(20, 20, 50, 0.9);
+    --glass: rgba(0, 255, 128, 0.03); --glass-border: rgba(0, 255, 128, 0.1);
+    --accent-1: #00ff80; --accent-2: #00cc66; --accent-3: #33ffaa;
+    --accent: #00ff80; --accent2: #00cc66; --accent3: #33ffaa;
+    --cyan: #00ffff; --emerald: #00ff80; --rose: #ff0080;
+    --glow-purple: rgba(0, 255, 128, 0.4); --glow-cyan: rgba(0, 255, 255, 0.3);
+}
+
+/* ===== حماية خريطة الحروف من الثيمات ===== */
+/* Hex map must always use the game's team colors, not theme colors */
+.hex-grid-container {
+    --team1: #f97316 !important;
+    --team1-glow: rgba(249, 115, 22, 0.3) !important;
+    --team1-rgb: 249, 115, 22 !important;
+    --team2: #22c55e !important;
+    --team2-glow: rgba(34, 197, 94, 0.3) !important;
+    --team2-rgb: 34, 197, 94 !important;
+}
+
+/* ===== حماية أزرار الصفحة الرئيسية من الثيمات ===== */
+/* Ensure action cards remain visible on light/rose themes */
+[data-color-theme="rose"] .action-card,
+[data-color-theme="rose"] .modal-box,
+[data-color-theme="rose"] .modal-btn,
+[data-color-theme="rose"] .btn-reset,
+[data-color-theme="rose"] .btn-minus,
+[data-color-theme="rose"] .btn-plus,
+[data-color-theme="rose"] .share-input,
+[data-color-theme="rose"] .rename-input {
+    color: var(--text) !important;
+}
+
+[data-color-theme="rose"] .action-card .card-title,
+[data-color-theme="rose"] .action-card .card-desc {
+    -webkit-text-fill-color: initial;
+}
+
+[data-color-theme="rose"] .card-primary .card-icon {
+    background: linear-gradient(135deg, #ec4899, #db2777) !important;
+    color: white !important;
+}
+
+[data-color-theme="rose"] .card-secondary .card-icon {
+    background: linear-gradient(135deg, #f9a8d4, #f472b6) !important;
+    color: white !important;
+}
+
+[data-color-theme="rose"] .card-display .card-icon {
+    background: linear-gradient(135deg, #f472b6, #f43f5e) !important;
+    color: white !important;
+}
+
+/* Ensure buttons in all themes have proper contrast */
+[data-color-theme] .modal-btn-go,
+[data-color-theme] .share-copy-btn,
+[data-color-theme] .support-btn,
+[data-color-theme] .btn-start,
+[data-color-theme] .btn-wrong,
+[data-color-theme] .btn-correct,
+[data-color-theme] .btn-endgame,
+[data-color-theme] .btn-danger,
+[data-color-theme] .btn-team1,
+[data-color-theme] .btn-team2,
+[data-color-theme] .btn-kick {
+    color: white !important;
+}
+
+/* Ensure hamburger menu stays visible on all themes */
+[data-color-theme] .hamburger-btn .hamburger-line {
+    background: var(--text) !important;
+}

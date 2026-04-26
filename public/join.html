@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>جاري التوجيه... | حروف مع أسامة</title>
+    <link rel="icon" href="/Logo.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800;900&display=swap" rel="stylesheet" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: rgba(6, 8, 15, 1);
+            font-family: 'Tajawal', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            height: 100dvh;
+            margin: 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* ===== Liquid Blob Animation ===== */
+        .blob-container {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1;
+        }
+
+        .blob {
+            position: absolute;
+            width: 100vmax;
+            height: 100vmax;
+            background: linear-gradient(135deg, #6366f1, #22d3ee, #a78bfa);
+            border-radius: 100%;
+            transform: scale(0);
+            opacity: 0;
+            animation: blobExpand 1.2s cubic-bezier(0.7, 0, 0.2, 1) forwards;
+            box-shadow: 0 0 100px 20px #6366f1;
+        }
+
+        @keyframes blobExpand {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+                border-radius: 100%;
+            }
+
+            40% {
+                transform: scale(0.15);
+                opacity: 1;
+                border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+            }
+
+            100% {
+                transform: scale(3.5);
+                opacity: 1;
+                border-radius: 10%;
+            }
+        }
+
+        /* ===== Blur Layer ===== */
+        .blur-layer {
+            position: absolute;
+            inset: 0;
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            opacity: 0;
+            z-index: 2;
+            background: rgba(6, 8, 15, 0.6);
+            animation: blurFade 0.8s ease 0.4s forwards;
+        }
+
+        @keyframes blurFade {
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* ===== Cinematic Text ===== */
+        .text-content {
+            position: relative;
+            z-index: 3;
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #ffffff;
+            text-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            transform: translateY(15px);
+            filter: blur(4px);
+            letter-spacing: 0px;
+            animation: textFloat 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.5s forwards;
+        }
+
+        .text-content span {
+            color: #22d3ee;
+        }
+
+        @keyframes textFloat {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+                letter-spacing: 4px;
+                filter: blur(0px);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="blob-container">
+        <div class="blob"></div>
+    </div>
+    <div class="blur-layer"></div>
+
+    <div class="text-content">
+        جاري النقل<span>...</span>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // استخراج كود الغرفة من الرابط
+            const urlParams = new URLSearchParams(window.location.search);
+            const roomCode = urlParams.get('room');
+
+            let target = '/home.html';
+            if (roomCode && roomCode.trim() !== '') {
+                target = '/index.html?room=' + encodeURIComponent(roomCode.trim());
+            }
+
+            // حل مشكلة الرجوع نهائياً
+            window.addEventListener('pageshow', function (event) {
+                if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
+                    window.location.replace('/home.html');
+                }
+            });
+
+            // توجيه بعد الانتهاء من الأنيميشن
+            setTimeout(() => {
+                window.location.replace(target);
+            }, 1300);
+        });
+    </script>
+</body>
+
+</html>

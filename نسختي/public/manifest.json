@@ -1,0 +1,16 @@
+{
+  "name": "منافسة المعرفة - UNI",
+  "short_name": "UNI",
+  "description": "منافسة المعرفة - أفضل لعبة أسئلة وتحديات وسرعة بديهة",
+  "start_url": "/index_mobile.html",
+  "display": "standalone",
+  "background_color": "#5c3a92",
+  "theme_color": "#5c3a92",
+  "icons": [
+    {
+      "src": "/Logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

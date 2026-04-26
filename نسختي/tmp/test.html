@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        body {
+            background: #1a1a2e;
+            margin: 0;
+            padding: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hex-grid-container {
+            background: conic-gradient(from 45deg at 50% 50%,
+                    #f97316 0deg 90deg,
+                    /* Right: Orange */
+                    #22c55e 90deg 180deg,
+                    /* Bottom: Green */
+                    #f97316 180deg 270deg,
+                    /* Left: Orange */
+                    #22c55e 270deg 360deg
+                    /* Top: Green */
+                );
+            padding: 2vw;
+            border-radius: 10px;
+        }
+
+        .hex-row {
+            display: flex;
+            justify-content: center;
+            gap: 0;
+            margin-top: -4.04vw;
+        }
+
+        .hex-row:first-child {
+            margin-top: 0;
+        }
+
+        .hexagon {
+            width: 14vw;
+            height: 16.16vw;
+            flex-shrink: 0;
+            background: #702693;
+            /* Purple border */
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        /* The white inner part */
+        .hexagon::before {
+            content: '';
+            position: absolute;
+            top: 2%;
+            left: 2%;
+            right: 2%;
+            bottom: 2%;
+            background: white;
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            z-index: 1;
+        }
+
+        /* The text */
+        .hexagon span {
+            position: relative;
+            z-index: 2;
+            font-size: 5vw;
+            font-weight: bold;
+            color: #702693;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="hex-grid-container">
+        <div class="hex-row">
+            <div class="hexagon"><span>س</span></div>
+            <div class="hexagon"><span>ش</span></div>
+            <div class="hexagon"><span>ن</span></div>
+            <div class="hexagon"><span>ت</span></div>
+            <div class="hexagon"><span>ي</span></div>
+        </div>
+        <div class="hex-row">
+            <div class="hexagon"><span>س</span></div>
+            <div class="hexagon"><span>ش</span></div>
+            <div class="hexagon"><span>ن</span></div>
+            <div class="hexagon"><span>ت</span></div>
+        </div>
+        <div class="hex-row">
+            <div class="hexagon"><span>س</span></div>
+            <div class="hexagon"><span>ش</span></div>
+            <div class="hexagon"><span>ن</span></div>
+            <div class="hexagon"><span>ت</span></div>
+            <div class="hexagon"><span>ي</span></div>
+        </div>
+    </div>
+</body>
+
+</html>
