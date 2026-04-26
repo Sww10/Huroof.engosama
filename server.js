@@ -109,6 +109,11 @@ setInterval(() => {
   }
 }, 5 * 60 * 1000);
 
+// Lightweight ping endpoint for cron jobs (Render keep-awake)
+app.get('/ping', (req, res) => {
+  res.send('OK');
+});
+
 // Redirect root to home page
 app.get('/', (req, res) => {
   res.redirect('/home.html');
