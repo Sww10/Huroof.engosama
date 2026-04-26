@@ -2,21 +2,9 @@
   "name": "trivia-buzzer",
   "version": "1.0.0",
   "description": "Real-time multiplayer trivia game buzzer",
-  "main": "main.js",
+  "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "electron:start": "electron .",
-    "electron:build": "electron-builder --win"
-  },
-  "build": {
-    "appId": "com.trivia.buzzer",
-    "productName": "Trivia Buzzer Host",
-    "directories": {
-      "output": "dist"
-    },
-    "win": {
-      "target": "nsis"
-    }
+    "start": "node server.js"
   },
   "dependencies": {
     "compression": "^1.8.1",
@@ -26,10 +14,5 @@
     "socket.io": "^4.7.2",
     "socket.io-client": "^4.8.3",
     "stripe": "^20.4.1"
-  },
-  "devDependencies": {
-    "electron": "^41.0.4",
-    "electron-builder": "^26.8.1",
-    "wait-on": "^9.0.4"
   }
 }
