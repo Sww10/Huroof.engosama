@@ -2083,7 +2083,9 @@
                 }
             }
             if (tn) teamNames = tn;
-            if (winner) currentWinner = winner; else currentWinner = null;
+            if (winner !== undefined) {
+                currentWinner = winner;
+            }
 
             if (currentRound) document.getElementById('roundCounter').textContent = currentRound;
 
